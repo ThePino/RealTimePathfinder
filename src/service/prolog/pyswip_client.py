@@ -2,6 +2,7 @@ from pyswip import Prolog
 from src.model.prolog.edge import Edge
 from src.model.prolog.node import Node
 import logging
+import time
 
 
 class PySwipClient:
@@ -76,8 +77,11 @@ class PySwipClient:
         :return:
         """
         logging.debug(f"Executing query on prolog: '{query}'..")
+        start_time = time.time()
         query_result = self.prolog.query(query)
         return_value = list(query_result)
         logging.debug(f"item size: {len(return_value)}")
         query_result.close()
+        end_time = time.time()
+        logging.debug(f'Time passed in prolog query {end_time - start_time}s')
         return return_value

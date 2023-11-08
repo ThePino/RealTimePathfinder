@@ -62,6 +62,7 @@ class DefinedEventGenerator(EventGenerator):
         super().__init__(prolog)
         self.events = events
         self.index = 0
+        logging.debug('Event generator initiated')
 
     def update(self, time: int):
         """
@@ -69,11 +70,13 @@ class DefinedEventGenerator(EventGenerator):
         :param time:
         :return:
         """
+        logging.debug('Updating events..')
         while self.index < len(self.events) and time >= self.events[self.index].time:
             event = self.events[self.index]
             self._change_status(event.way_id)
             logging.debug(f"Event on time {event.time} on way {event.way_id}")
             self.index = self.index + 1
+        logging.debug('Events updated.')
 
     def get_time_to_wait_to_next_event(self, time):
         """

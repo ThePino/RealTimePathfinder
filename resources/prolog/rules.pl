@@ -39,8 +39,6 @@ get_all_node(Node, Lat, Lon):-
 
 % gets all the ways from a given node From_node and/or To_node
 get_ways(Way, From_node, To_node):-
-    is_node(From_node),
-    is_node(To_node),
     is_way(Way),
     prop(Way, from_node, From_node),
     prop(Way, to_node, To_node).

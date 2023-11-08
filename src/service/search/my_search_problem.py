@@ -16,6 +16,7 @@ class MySearchProblem(Search_problem):
         self.from_node = from_node
         self.to_node = to_node
         self.pwsip_client = pwswip_client
+        self.cache = dict()
         logging.info(f"Problem to solve from {from_node.id} to {to_node.id}")
 
     def start_node(self):
@@ -25,14 +26,17 @@ class MySearchProblem(Search_problem):
         return self.to_node == node
 
     def neighbors(self, node):
-        edges = self.pwsip_client.ask_all_available_from_node(node.id)
-        return list(map(lambda _: self._make_arc(node, _), edges))
+        if node not in self.cache:
+            edges = self.pwsip_client.ask_all_available_from_node(node.id)
+            edges = list(map(lambda _: self._make_arc(node, _), edges))
+            self.cache[node] = edges
+        return self.cache[node]
 
     def heuristic(self, n):
-        edge = Edge(self.to_node, 10)
+        edge = Edge(self.to_node, 50)
         return self._make_arc(n, edge).cost
 
-    def _make_arc(self, from_node: Node, edge: Edge):
+    def _make_arc(self, from_node: Node, edge: Edge) -> Arc:
         """
         It creates an arc from the given nodes
         :param from_node:

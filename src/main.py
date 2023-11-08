@@ -8,7 +8,7 @@ from src.service.handler import Handler
 from src.service.event.event_generator import DefinedEventGenerator
 from src.model.prolog.node import Node
 from src.model.event.event import Event
-
+import sys
 
 class Environment:
     """
@@ -135,11 +135,13 @@ def _find_longest_pair_of_node(nodes: list[Node]) -> list[Node]:
     :return: The couple of nodes
     """
     assert len(nodes) >= 2, 'There should be at least two element to get a pair'
+    logging.debug('Finding the pair of nodes with maximum distance..')
     from_node, to_node, distance = None, None, -1
     for i in range(0, len(nodes)):
         for j in range(i + 1, len(nodes)):
             if nodes[i].time_to_travel(nodes[j], 50) > distance:
                 from_node, to_node = nodes[i], nodes[j]
+    logging.debug('Found the pair of nodes')
     return from_node, to_node
 
 
