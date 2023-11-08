@@ -8,6 +8,7 @@ from src.service.handler import Handler
 from src.service.event.event_generator import DefinedEventGenerator
 from src.model.prolog.node import Node
 from src.model.event.event import Event
+from src.service.data.osm_xml_parser import ParsingResult
 import sys
 
 class Environment:
@@ -57,11 +58,11 @@ def main(env: Environment):
 
     final_path, time_passed = handler.run()
     logging.info(
-        f"Number of traversal {len(final_path) - 1}, node traversal {final_path}, time passed in seconds {time_passed}")
+        f"Number of traversal {len(final_path) - 1}, node traversal {final_path}, time passed in ms {time_passed}")
     logging.info("Application has been shutdown")
 
 
-def _update_facts_file(path_to_osm_data: str, parser: OSMXmlParser, path_to_prolog_facts: str, writer: FactsWriter, ):
+def _update_facts_file(path_to_osm_data: str, parser: OSMXmlParser, path_to_prolog_facts: str, writer: FactsWriter, ) -> ParsingResult:
     """
     A subroutine to parse data from the open street model and store the facts related on a file
     :param path_to_osm_data: The path of the file of the open street model
@@ -77,7 +78,7 @@ def _update_facts_file(path_to_osm_data: str, parser: OSMXmlParser, path_to_prol
     logging.info('Imported open street data completed.')
     assert result is not None, 'A parsing result should be produced'
     writer.write_facts(result, path_to_prolog_facts)
-    return
+    return result
 
 
 def _is_connected(nodeA: Node, nodeB: Node, prolog: PySwipClient) -> bool:
@@ -87,6 +88,7 @@ def _is_connected(nodeA: Node, nodeB: Node, prolog: PySwipClient) -> bool:
     :param nodeB: the second node to check
     :return: True if the 2 nodes are connected
     """
+    logging.debug(f'Checking {nodeA} and {nodeB}')
     q = [nodeA]
     visited = set()
     visited.add(nodeA)
@@ -152,7 +154,7 @@ if __name__ == "__main__":
     prolog_facts_path_main = '../resources/prolog/facts.pl'
     prolog_rules_path_main = '../resources/prolog/rules.pl'
     open_street_data_path_test = '../resources/open_street_map/test.osm'
-    open_street_data_path_main = '../resources/open_street_map/vatican.osm'
+    open_street_data_path_main = '../resources/open_street_map/atrani.osm'
     event_data_path_test = '../resources/event/event_test.xml'
     event_data_path_main = '../resources/event/event.xml'
     from_node_id_test = 'node3'

@@ -37,8 +37,10 @@ class OSMXmlParser:
     """
     The parser of the open street model xml
     """
+
     def __init__(self):
         logging.debug('OSMXmlParser service initialed.')
+
     def parse_osm_xml(self, file):
         """
         :param self:
@@ -75,13 +77,37 @@ class OSMXmlParser:
         logging.debug('Completed of parsing of osm xml data.')
 
         # Filtering data
-        logging.debug('Filtering unused data..')
-        node_refs = set()
-        drivable_ways = list(filter(lambda _: _.is_drivable(), ways))
-        for w in drivable_ways:
-            for node_ref in w.node_list:
-                node_refs.add(node_ref)
-        nodes = list(map(lambda id_node: node_dict.get(id_node), node_refs))
-        logging.debug('Completed filtering of unused data.')
 
+        logging.debug('Filtering unused data..')
+        logging.debug(f'Number of node before filtering {len(node_dict)} number of ways {len(ways)}')
+        node_refs = set()
+        node_cnt = dict()
+        drivable_ways = list(filter(lambda _: _.is_drivable(), ways))
+
+        for w in drivable_ways:
+            for node_id in w.node_list:
+                if node_id not in node_cnt:
+                    node_cnt[node_id] = 0
+                node_cnt[node_id] = 1 + node_cnt[node_id]
+            node_refs.add(w.node_list[0])
+            node_refs.add(w.node_list[-1])
+
+
+        for key, value in node_cnt.items():
+            if value >= 2:
+                node_refs.add(key)
+
+        for w in drivable_ways:
+            for n in w.node_list:
+                node_refs.add(n)
+
+        for w in drivable_ways:
+            w.node_list = list(filter(lambda _: _ in node_refs, w.node_list))
+            for i in range(0, len(w.node_list) - 1):
+                if w.node_list[i] == w.node_list[i + 1]:
+                    logging.error(f'Same node for way with id {w.id_way}')
+                    assert not(w.node_list[i] == w.node_list[i + 1]), "Can't be same node"
+
+        nodes = list(map(lambda id_node: node_dict.get(id_node), node_refs))
+        logging.debug(f'Completed filtering of unused data. node found {len(nodes)}')
         return ParsingResult(nodes, drivable_ways, min_lat, max_lat, min_lon, max_lon)

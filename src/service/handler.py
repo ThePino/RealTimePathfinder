@@ -69,7 +69,10 @@ class Handler:
                 # Resetting the path
                 last_path, index = [], 2
                 continue
-            time += (from_node.time_to_travel(to_node, speed))
+
+            time_needed = (from_node.time_to_travel(to_node, speed))
+            logging.debug(f'Found a way with speed {speed} and time to travel of {time_needed}' )
+            time += time_needed
             end_path.append(to_node)
             index += 1
 

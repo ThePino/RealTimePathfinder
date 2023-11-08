@@ -1,6 +1,7 @@
 # searchGeneric.py - Generic Searcher, including depth-first and A*
 # AIFCA Python code Version 0.9.9 Documentation at http://aipython.org
 # Download the zip file and read aipython.pdf for documentation
+import logging
 
 # Artificial Intelligence: Foundations of Computational Agents http://artint.info
 # Copyright 2017-2023 David L. Poole and Alan K. Mackworth
@@ -45,10 +46,11 @@ class Searcher(Displayable):
         while not self.empty_frontier():
             self.path = self.frontier.pop()
             self.num_expanded += 1
+            logging.debug(f'Visiting {self.path.end()}')
             if self.problem.is_goal(self.path.end()):# solution found
                 self.solution = self.path  # store the solution found
                 self.display(1, f"Solution: {self.path} (cost: {self.path.cost})",
-                             f"{self.num_expanded} paths have been expanded and",
+                            f"{self.num_expanded} paths have been expanded and",
                              f"{len(self.frontier)} paths remain in the frontier")
                 return self.path
             else:

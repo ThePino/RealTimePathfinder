@@ -30,11 +30,13 @@ class MySearchProblem(Search_problem):
             edges = self.pwsip_client.ask_all_available_from_node(node.id)
             edges = list(map(lambda _: self._make_arc(node, _), edges))
             self.cache[node] = edges
+        for w in self.cache[node]:
+            assert node.id != w.to_node.id, "Can't be same node"
         return self.cache[node]
 
     def heuristic(self, n):
         edge = Edge(self.to_node, 50)
-        return self._make_arc(n, edge).cost
+        return self._make_arc(n, edge).cost ** 2
 
     def _make_arc(self, from_node: Node, edge: Edge) -> Arc:
         """

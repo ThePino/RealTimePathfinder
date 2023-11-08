@@ -1,6 +1,7 @@
 # searchProblem.py - representations of search problems
 # AIFCA Python code Version 0.9.9 Documentation at http://aipython.org
 # Download the zip file and read aipython.pdf for documentation
+import logging
 
 # Artificial Intelligence: Foundations of Computational Agents http://artint.info
 # Copyright 2017-2023 David L. Poole and Alan K. Mackworth
@@ -47,7 +48,7 @@ class Arc(object):
         self.to_node = to_node
         self.action = action
         self.cost = cost
-        assert cost >= 0, (f"Cost cannot be negative: {self}, cost={cost}")
+        assert cost >= 0, 'Cost cannot be negative'
 
     def __repr__(self):
         """string representation of an arc"""

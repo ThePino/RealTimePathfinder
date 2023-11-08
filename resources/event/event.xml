@@ -1,3 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <events>
+    <event time="22525" way="way283804142_89"/>
+    <event time="23700" way="way283804142_89"/>
+    <event time="24779" way="way283804142_85"/>
+    <event time="25000" way="way283804142_85"/>
+    <event time="6004" way="way118074429_25"/>
+    <event time="6100" way="way118074429_25"/>
+    <event time="100" way="way118074429_36"/>
+    <event time="1000" way="way118074429_36"/>
 </events>

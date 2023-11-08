@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <events>
-    <event time="10000" way="way5_0"/>
-    <event time="100000" way="way5_0"/>
+    <event time="10000000" way="way5_0"/>
+    <event time="100000000" way="way5_0"/>
 </events>

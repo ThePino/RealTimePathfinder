@@ -1,3 +1,5 @@
+import logging
+
 import src.service.util as u
 
 
@@ -38,6 +40,10 @@ class Node:
         :return: The amount of seconds needed to reach the given node
         """
         distance_km = u.haversine_distance(self.lat, self.lon, node.lat, node.lon)
+        if distance_km == 0:
+            logging.debug(f'nodes with distance 0 {self} and {node}')
+        time = u.calculate_time(distance_km, speed_km)
+        assert (time > 0 or (self == node)), 'Time should be positive if node different'
         return u.calculate_time(distance_km, speed_km)
 
     @classmethod
