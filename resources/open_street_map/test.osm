@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="CGImap 0.8.9 (1811170 spike-08.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <bounds minlat="-3" minlon="0" maxlat="3" maxlon="6"/>
+
+ <node id="0" lon="0" lat="0"></node>
+ <node id="1" lon="1" lat="0"></node>
+ <node id="2" lon="2" lat="0"></node>
+ <node id="3" lon="3" lat="0"></node>
+ <node id="4" lon="4" lat="0"></node>
+ <node id="5" lon="5" lat="0"></node>
+ <node id="6" lon="6" lat="0"></node>
+
+ <node id="7" lon="3" lat="-1"></node>
+ <node id="8" lon="6" lat="-1"></node>
+
+ <node id="9" lon="3" lat="-2"></node>
+ <node id="10" lon="4" lat="-2"></node>
+ <node id="11" lon="5" lat="-2"></node>
+ <node id="12" lon="6" lat="-2"></node>
+
+ <node id="13" lon="4" lat="-3"></node>
+
+ <node id="14" lon="3" lat="1"></node>
+ <node id="15" lon="3" lat="2"></node>
+
+ <way id="0">
+    <nd ref="0"/>
+    <nd ref="1"/>
+    <nd ref="2"/>
+    <nd ref="3"/>
+    <nd ref="4"/>
+    <nd ref="5"/>
+    <nd ref="6"/>
+    <tag k="highway" v="unclassified"/>
+    <tag k="oneway" v="no"/>
+    <tag k="maxspeed" v="10"/>
+ </way>
+
+ <way id="1">
+     <nd ref="3"/>
+     <nd ref="7"/>
+     <nd ref="9"/>
+     <tag k="highway" v="unclassified"/>
+     <tag k="oneway" v="yes"/>
+     <tag k="maxspeed" v="10"/>
+  </way>
+
+  <way id="2">
+       <nd ref="6"/>
+       <nd ref="8"/>
+       <nd ref="12"/>
+       <tag k="highway" v="unclassified"/>
+       <tag k="oneway" v="-1"/>
+       <tag k="maxspeed" v="10"/>
+    </way>
+
+   <way id="3">
+    <nd ref="10"/>
+    <nd ref="13"/>
+    <tag k="oneway" v="no"/>
+    <tag k="maxspeed" v="10"/>
+    <tag k="highway" v="unclassified"/>
+   </way>
+
+   <way id="4">
+    <nd ref="3"/>
+    <nd ref="14"/>
+    <nd ref="15"/>
+    <tag k="oneway" v="no"/>
+    <tag k="maxspeed" v="10"/>
+    <tag k="highway" v="unclassified"/>
+   </way>
+
+   <way id="5">
+    <nd ref="9"/>
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <tag k="oneway" v="no"/>
+    <tag k="maxspeed" v="10"/>
+    <tag k="highway" v="unclassified"/>
+   </way>
+</osm>
