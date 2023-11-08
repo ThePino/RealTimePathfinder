@@ -2,7 +2,15 @@ from xml.etree.ElementTree import Element
 
 
 class Event:
+    """
+    The class that represents an event
+    """
     def __init__(self, way_id: str, time: int):
+        """
+
+        :param way_id: The id of the way in the event
+        :param time: The time in second on which the event has happened
+        """
         self.way_id = way_id
         self.time = time
 

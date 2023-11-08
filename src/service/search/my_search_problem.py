@@ -6,7 +6,12 @@ from src.external_lib.searchProblem import Arc
 import math
 import logging
 
+
 class MySearchProblem(Search_problem):
+    """
+    My specialized problem to solve with the implementation of knowledge base
+    """
+
     def __init__(self, from_node: Node, to_node: Node, pwswip_client: PySwipClient):
         self.from_node = from_node
         self.to_node = to_node
@@ -35,5 +40,3 @@ class MySearchProblem(Search_problem):
         :return:
         """
         return Arc(from_node, edge.node, from_node.time_to_travel(edge.node, edge.max_speed))
-
-

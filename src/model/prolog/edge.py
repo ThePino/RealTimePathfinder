@@ -7,6 +7,11 @@ class Edge:
     """
 
     def __init__(self, node: Node, max_speed: int):
+        """
+        The edge returned by a prolog query
+        :param node: The destination node
+        :param max_speed: The speed in km for this edge
+        """
         self.node = node
         self.max_speed = max_speed
 

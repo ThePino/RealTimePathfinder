@@ -14,12 +14,23 @@ class Handler:
     """
 
     def __init__(self, start_node: Node, end_node: Node, prolog: PySwipClient, event_generator: EventGenerator):
+        """
+        The initialization of the handler
+        :param start_node: The starting node
+        :param end_node: The goal node
+        :param prolog: The prolog client
+        :param event_generator: The event generator
+        """
         self.start_node = start_node
         self.end_node = end_node
         self.prolog = prolog
         self.event_generator = event_generator
 
     def run(self) -> list[Node]:
+        """
+        The logic of the simulation idea
+        :return:
+        """
         logging.debug(f"Starting from {self.start_node}")
         end_path = [self.start_node]
         time = 0

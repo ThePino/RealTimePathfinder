@@ -4,7 +4,6 @@ import logging
 
 
 class EventXMLParser:
-
     def parse_event_xml(self, file) -> list[Event]:
         """
         It parses the event from the xml file

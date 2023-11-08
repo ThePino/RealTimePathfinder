@@ -2,7 +2,17 @@ import src.service.util as u
 
 
 class Node:
+    """
+    The node returned by a prolog query
+    """
+
     def __init__(self, id: str, lat: float, lon: float):
+        """
+
+        :param id: The id of the node
+        :param lat: The lattitude of the node
+        :param lon: The longitude of the node
+        """
         self.id = id
         self.lat = lat
         self.lon = lon
@@ -17,11 +27,16 @@ class Node:
     def __hash__(self):
         return hash(self.id)
 
-
     def __repr__(self):
         return '{' + f"id: {self.id}, lat: {self.lat}, lon: {self.lon}" + '}'
 
     def time_to_travel(self, node: 'Node', speed_km: int):
+        """
+        It calculates the amount of seconds needed to travel from one node to the another by the given speed in km
+        :param node: The node to reach
+        :param speed_km: The speed to travel
+        :return: The amount of seconds needed to reach the given node
+        """
         distance_km = u.haversine_distance(self.lat, self.lon, node.lat, node.lon)
         return u.calculate_time(distance_km, speed_km)
 
