@@ -535,9 +535,14 @@ viaggiare alla velocità massima.
 In questo modo non sovrastimiamo il costo effettivo della ricerca e diamo priorità ai nodi geograficamente più vicini al nodo di destinazione.
 Questo vale poiché non esisterebbe nessun altro percorso più breve o una serie di percorsi con velocità più alte possibili.
 
+Il calcolo del percorso ottimale viene fatto sullo stato attuale della base di conoscenza.
+Pian piano che si segue il percorso ottimale ottenuto da A*, si aggiorna la base di conoscenza e si chiede se l'arco che si sta attraversando sia disponibile.
 
+Se l'arco è disponibile si attraversa, altrimenti si ricalcola il percorso riapplicando A* sullo stato attuale.
 
+Se A* non restituisce nessun percorso, si simula un attesa cosi che gli eventi successivi abbiano effetto.
 
+Si ripete fin quando non si arriva a destinazione. 
 
 ### Strumenti utilizzati
 
