@@ -27,17 +27,18 @@ class EventGenerator:
         """
         return -1
 
-    def _change_status(self, way_id: str):
+    def _change_status(self, way_id: str) -> bool:
         """
         It changes the status for the given way
         :param way_id: The way to change the status
-        :return:
+        :return: The new state of the edge
         """
         value = True
         if self.state[way_id] == value:
             value = False
         self.state[way_id] = value
         self.prolog.set_available_attribute(way_id, value)
+        return value
 
 
 class NoEventGenerator(EventGenerator):
@@ -64,19 +65,21 @@ class DefinedEventGenerator(EventGenerator):
         self.index = 0
         logging.debug('Event generator initiated')
 
-    def update(self, time: int):
+    def update(self, time: int) -> bool:
         """
         It updates the state of the edges by the time passed
         :param time:
         :return:
         """
+        has_unlocked = False
         logging.debug('Updating events..')
         while self.index < len(self.events) and time >= self.events[self.index].time:
             event = self.events[self.index]
-            self._change_status(event.way_id)
+            has_unlocked = has_unlocked or self._change_status(event.way_id)
             logging.debug(f"Event on time {event.time} on way {event.way_id}")
             self.index = self.index + 1
         logging.debug('Events updated.')
+        return has_unlocked
 
     def get_time_to_wait_to_next_event(self, time):
         """
@@ -84,7 +87,7 @@ class DefinedEventGenerator(EventGenerator):
         :param time: The current time
         :return:
         """
-        self.update(time)
+        has_updated = self.update(time)
         if self.index >= len(self.events):
-            return -1
-        return self.events[self.index].time - time
+            return [-1, has_updated]
+        return [self.events[self.index].time - time, has_updated]

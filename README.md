@@ -12,14 +12,14 @@ AA 2022-2023
 
 ## Introduzione
 
-Questo caso di studio si propone di trovare il percorso minimo tra una coppia di nodi in un grafo dove la possibilità di attraversare ogni arco varia nel tempo.
+Questo caso di studio si propone di trovare il percorso minimo tra una coppia di nodi in un grafo dove la possibilità di attraversare ogni arco può variare nel tempo.
 
-Il dominio specifico prende in considerazione lo spostamento in auto in una città e l'esigenza di arrivare a una determinata posizione.
+Il dominio specifico prende in considerazione lo spostamento in auto in una città, con l'esigenza di arrivare a una determinata destinazione.
 
-Durante il percorso verso destinazione, causa incidenti o manifestazioni, certe strade diventino impercorribili ed è necessario cambiare strada.
-Col passare del tempo, è possibile che strade precedentemente bloccate siano di nuovo attraversabili fornendo un percorso
+Durante il percorso verso la destinazione, certe strade possono diventare impercorribili causa incidenti o manifestazioni, ed è necessario cambiare percorso.
+Col passare del tempo, è possibile che strade precedentemente bloccate siano di nuovo attraversabili rientrando nel percorso
 migliore.
-Tutti queste modifiche di operabilità sulle strade prendono il nome di **events**.
+Tutte queste modifiche di operabilità sulle strade prendono il nome di **events**.
 
 Per percorso migliore, in questo caso, si intende il percorso che mi porti a destinazione nel minor tempo possibile.
 
@@ -27,32 +27,32 @@ Per percorso migliore, in questo caso, si intende il percorso che mi porti a des
 ## Elenco argomenti di interesse
 
 * **Condivisione della conoscenza**: utilizzo di ontologie per attribuire significato al dataset, rappresentazione con *RDF XML* ed estrazione di dati con un parser XML.
-* **Rappresentazione e ragionamento relazionale**: caricamento di dati in una base di conosceza in *Prolog* con inferenze sulla conoscenza per ricavare i dati per la ricerca sul grafo.
-* **Risoluzione di problemi mediante ricerca**: Utilizzo di *A** con la tecnica del *Multi Path Pruning* per evitare cicli.
+* **Rappresentazione e ragionamento relazionale**: caricamento dei dati in una base di conoscenza in *Prolog* con inferenze sulla conoscenza per ricavare i dati per la ricerca sul grafo.
+* **Risoluzione di problemi mediante ricerca**: Utilizzo di *A** con la tecnica del *Multi Path Pruning*.
 
 ## Condivisione della conoscenza
 
 L'ontologia è la specifica dei concetti all'interno di un dominio.
-Attribuisce un significato ai termini utilizzati e le relazioni tra di esse.
+Attribuisce un significato ai simboli utilizzati e le relazioni tra di essi.
 
-Vengono utilizzate per permettere l'utilizzo dei dati indipendentemente dall'applicazione interessata.
+Vengono utilizzate per permettere la condivisione dei dati indipendentemente dall'applicazione interessata.
 
-Le ontologie vengono mantenute dalle community che le usano.
+Le ontologie vengono sviluppate in accordo con le community che sono coinvolte con il dominio d'interesse.
 
 ### Sommario
 
 L'**ontologia** utilizzata nel progetto è quella di [Open Street Map](https://www.openstreetmap.org/) descritta in *RDF*.
-Nella cartella `resources/open_street_map` è presente il file 'ontology.ttl' contenente l'ontologia.
+Nella cartella `resources/open_street_map` è presente il file `ontology.ttl` contenente l'ontologia.
 
-Il framework *RDF* è utilizzato per la rappresentazione dei dati sul web.
-Consiste di rappresentare dati attraverso tuple `<soggetto><predicato><oggetto>`.
+Il framework *RDF* è utilizzato per condivisione di informazioni nel web semantico.
+Consiste nel rappresentare le informazioni attraverso triple `<individuo><proprietà><valore>`.
 
-Sono stati diversi concetti dell'ontologia *osm*.
+Sono stati utilizzati diversi elementi dell'ontologia *osm*.
 
 #### node
 
 Il concetto di `node` è un punto nello spazio caratterizzato da lattitude e longitude.
-Utilizzato all'interno del progetto per mappare la città in nodi.
+Utilizzato all'interno del progetto per mappare la posizione geografica del inizio, intersezioni e fine delle strade della città.
 
 ```rdf
 osm:Node
@@ -141,7 +141,7 @@ Esempio di elemento `highway` e `HighwayValue`.
 
 #### oneway, OnewayValue
 
-L'elemento `oneway` definisce in che modo gli elementi `node` del elemento `way` devono essere considerati.
+L'elemento `oneway` definisce in che modo gli elementi `node` del elemento `way` devono essere interpretati.
 L'elemento `OnewayValue` definisce l'ordine con cui analizzare la lista (direzionale, bidirezionale, inverso).
 ```rdf
 osm:oneway
@@ -171,7 +171,7 @@ Esempio di un elemento `oneway` e `OnewayValue`.
 #### maxspeed
 
 L'elemento `maxspeed` definisce la velocità massima percorribile in km/h.
-Utilizzata nel progetto per indicare la velocità massima per attraversare un arco.
+Utilizzata nel progetto per indicare la velocità massima ammessa su quella strada.
 
 ```rdf
 osm:maxspeed
@@ -202,28 +202,28 @@ agli elementi `node` e `way`.
 
 Per ricavare i dati correlati all'ontologia, si è utilizzata la funzione esporta dal sito web [open street map](https://www.openstreetmap.org) scegliendo la città desiderata.
 
-I dati scaricati sono strutturati in *XML*. 
+I dati scaricati sono strutturati in *RDF XML*. 
 
-I dati scaricati sono presenti in 'resource/open_street_map/atrani.osm'.
-È presente anche il file 'resource/open_street_map/test.osm' utilizzato come test durante lo sviluppo.
+I dati scaricati sono presenti in `resource/open_street_map/atrani.osm`.
+È presente anche il file `resource/open_street_map/test.osm` utilizzato come test durante lo sviluppo.
 
 ### Decisioni di progetto
 
-Per l'importazione dei dati scaricati in *XML* è stata utilizzata la libreria `xml` default di python.
+Per l'importazione dei dati scaricati in *RDF XML* è stata utilizzata la libreria `xml` default di python.
 
 Il servizio addetto al parsing del file di open street map è nella cartella del progetto `src/service/data/osm_xml_parser.py`.
 
 Ha il compito di importare i dati e trasformarli in oggetti più maneggevoli a livello di codice.
 Il modello python adoperato è situato nella cartella del progetto `src/model/osm`.
 
-Un ulteriore compito è quello di filtrare i dati.
+Un ulteriore compito svolto è quello di filtrare i dati.
 
 Un primo filtraggio avviene sugli elementi `way` scartando tutti le strade non percorribili dalle auto.
 
 Il filtraggio avviene basandosi sulle proprietà dell'elemento `way`, indicati tramite tag, avente come chiave `highway`.
 I valori ammessi per `highway` sono definti all'interno del codice in `src/model/way` nella enumerazione `HighwayOSMEnum`.
 I valori indicati nell' enumerazione, sono stati scelti dai possibili valori indicati dall'elemento `HighwayValue` che
-indicava una percorrenza possibile per le auto.
+indica una percorrenza possibile per le auto.
 
 Un secondo filtraggio è necessario per ridurre le dimensioni del grafo. 
 
@@ -234,7 +234,7 @@ di chiamate ricorsive, e con cammini di 300 nodi e più, l'ambiente python non r
 
 I dati di open street map sono molto precisi, la distanza tra due nodi può anche essere meno di un metro; considerando
 una media di un nodo al metro, su 1000 metri si avranno 1000 nodi.
-La semplificazione del grafo adottata è quella di rimuovere i nodi intermedi che non hanno intersezioni.
+La semplificazione del grafo adottata è quella di rimuovere i nodi intermedi che non sono intersezioni.
 Riprendendo l'esempio di un cammino rettilineo di 1000m, avremo 2 nodi piuttosto che 1000.
 
 Esempio grafico:
@@ -256,8 +256,8 @@ G   H
 Questa semplificazione è giustificata da tre fattori:
 
 1. Il percorso ottimale non dipende dal numero di archi attraversati.
-2. Tutti i nodi che generano intersezioni rimangono nel grafo, lasciandolo connesso.
-3. Se viene rimossa la possibilità di attraversa un arco intermedio basta disabilitare l'arco che lo riassume. 
+2. Tutti i nodi che sono di intersezione rimangono nel grafo, lasciandolo connesso.
+3. Se vi è un evento che impedisce la possibilità di attraversa un arco intermedio basta disabilitare l'arco che lo include. 
 
 Per le limitazioni di Python, la città in esame scelta è [Atrani](https://it.wikipedia.org/wiki/Atrani).
 Una delle più piccole città d'Italia.
@@ -269,7 +269,7 @@ Nell'ontologia di *osm* non sono definiti gli eventi.
 Un evento è un elemento definito appositamente per la realizzazione del progetto.
 È caratterizzato da due attributi:
 
-* **time**: l'unità di tempo in milli secondi in cui accade un evento.
+* **time**: l'unità di tempo in milli secondi in cui accade l'evento.
 * **way**: l'identificativo dell'arco che cambia stato.
 
 Al tempo indicato, lo stato dell'arco identificato viene invertito. 
@@ -281,33 +281,33 @@ All'inizio, ogni arco è attraversabile.
 Per garantire una finitezza dell'algoritmo, il numero di eventi per ogni arco coinvolto deve essere pari.
 In modo tale da ripristinare lo stato di attraversabile.
 
-Non è stata realizzata un estensione dell'ontologia *osm* perché non si ha necessità di condividere tale informazioni
+Non è stata realizzata un' estensione dell'ontologia *osm* perché non si ha necessità di condividere tale informazioni
 con fonti esterne al progetto.
 
-Gli eventi vengono importati dal servizio in 'src/service/data/event_xml_parser.py' presenti nel path 'resources/event/event.xml'.
-Nello steso percorso è disponibile 'event_test.xml' utilizzato durante lo sviluppo.
+Gli eventi vengono importati dal servizio in `src/service/data/event_xml_parser.py` presenti nel path `resources/event/event.xml`.
+Nello steso percorso è disponibile `event_test.xml` utilizzato durante lo sviluppo.
 
 ## Rappresentazione e ragionamento relazionale
 
-Una **Knowledge Base** è un sistema che organizza informazioni in modo strutturato e accessibile.
+Una **Knowledge Base** è un insieme di conoscenze organizzate in modo strutturato.
 
-È progettata per immagazzinare dati e agevolare il loro utilizzo da parte di programmi o agenti intelligenti.
+È progettata per immagazzinare conoscenze e agevolare il loro utilizzo da parte di programmi o agenti intelligenti.
 
 Questo sistema rappresenta la memoria a lungo termine di un agente, conservando la conoscenza necessaria per future azioni.
 
-La **Knowledge Base** è solitamente creata offline da esperti di conoscenza e dati che collaborano nella sua costruzione.
+La **Knowledge Base** è solitamente creata offline da esperti di conoscenza che collaborano nella sua costruzione.
 
 ### Sommario
 
 La base di conoscenza è strutturata in fatti e regole.
 
-I fatti sono i dati a disposizione della base di conoscenza per poter effettuare inferenze attraverso le regole.
+I fatti sono la conoscenza primitiva a disposizione della KB per poter derivare conoscenza attraverso le regole.
 
 #### Fatti 
 
-Per strutturare i fatti ho mantenuto la struttura del framework **rdf** (soggeto, predicato, oggetto).
+Per strutturare la conoscenza in maniera più omogenea ho utilizzato la rappresentazione individuo, proprietà, valore avvicinandomi così alla struttura di triple del framework **rdf**.
 
-All'interno è presente una sola procedura con i 3 parametri chiamata 'prop' che permette di definire i fatti.
+All'interno è presente una sola relazione con i 3 parametri chiamata 'prop' che permette di definire i fatti.
 
 I dati estratti dall'ontologia sono stati plasmati nelle classi `node` e `way`.
 
@@ -339,7 +339,7 @@ La classe `way` modella un arco nel grafo.
 | from_node | indica il nodo di partenza dell'arco                                             |
 | to_node   | indica il nodo di arrivo dell'arco                                               |
 | max_speed | indica la velocità massima in km che si può attraversare l'arco                  |
-| available | indica se l'arco è attraversabile. 'true' per atterversabile, 'false' altrimenti |
+| available | indica se l'arco è attraversabile. 'true' per attraversabile, 'false' altrimenti |
 
 Un esempio di definizione di `way`:
 
@@ -353,13 +353,14 @@ prop(way0, available, true).
 
 #### Regole 
 
-Le regole permettono di effettuare inerenze sulla base di dati.
+Le regole permettono di effettuare inferenza sulla KB.
 
 Sono state definite le seguenti regole:
 
 ##### is_node(X)
 
-La regola che indica se nome è un nodo.
+La regola che indica se X è un nodo.
+
 ```prolog
 is_node(X):-
     prop(X, type, node).
@@ -378,7 +379,7 @@ get_node_coord(X, Lat, Lot):-
 
 ##### is_way(X)
 
-Regola che indica se un nome è un arco.
+Regola che indica se X è un arco.
 
 ```prolog
 is_way(X):-
@@ -408,7 +409,7 @@ set_available_attribute(Way, Available) :-
 
 ##### get_all_way_ids(Way)
 
-Regola che restituisce tutti i nomi associati agli archi.
+Regola che restituisce tutti gli archi.
 
 ```prolog
 get_all_way_ids(Way):-
@@ -461,7 +462,7 @@ get_max_speed_way(Way, X):-
 
 #### get_max_speed_from_nodes(From_node, To_node, Max_speed)
 
-Regola che restituisce la velocità dell'arco fissato i due nodi.
+Regola che restituisce la velocità dell'arco fissati i due nodi.
 
 ```prolog
 get_max_speed_from_nodes(From_node, To_node, Max_speed):-
@@ -492,14 +493,14 @@ get_way_all_info_available(From_node, To_node, To_node_lat, To_node_lon, Max_spe
 Un limite di tale libreria è la definizione di fatti a runtime. 
 Per rimediare a tale limitazione, i fatti sono stati scritti su file e successivamente caricati attraverso la funzione `consult`.
 
-I fatti sono stati scritti dal servizio in `src/service/data/facts_writer` utilizzando i dati importati dal modello *osm*.
-Il file in cui vengono scritti i file è in `resources/prolog/facts.pl`.
+I fatti sono stati scritti dal servizio in `src/service/data/facts_writer.py` utilizzando i dati importati dal modello *osm*.
+Il file in cui vengono scritti i fatti è in `resources/prolog/facts.pl`.
 
 Le regole sono state scritte a mano.
 Il file in cui sono scritte le regole è in `resources/prolog/rules.pl`.
 Dovendo modificare a run time un fatto, è stato necessario aggiungere la seguente linea di codice alle regole `:- dynamic prop/3.`
 
-È stato realizzato il servizio in `pyswip_client` per astrarre le query con prolog.
+È stato realizzato il servizio in `pyswip_client` per interfacciarsi con le query in prolog.
 Il modello risultate dalle query prolog è in `src/model/prolog`. 
 
 ## Risoluzione di problemi mediante ricerca
@@ -536,11 +537,11 @@ In questo modo non sovrastimiamo il costo effettivo della ricerca e diamo priori
 Questo vale poiché non esisterebbe nessun altro percorso più breve o una serie di percorsi con velocità più alte possibili.
 
 Il calcolo del percorso ottimale viene fatto sullo stato attuale della base di conoscenza.
-Pian piano che si segue il percorso ottimale ottenuto da A*, si aggiorna la base di conoscenza e si chiede se l'arco che si sta attraversando sia disponibile.
+Pian piano che si segue il percorso ottimale ottenuto da A*, si aggiorna la base di conoscenza e si chiede se l'arco che si sta per attraversare sia disponibile.
 
 Se l'arco è disponibile si attraversa, altrimenti si ricalcola il percorso riapplicando A* sullo stato attuale.
 
-Se A* non restituisce nessun percorso, si simula un attesa cosi che gli eventi successivi abbiano effetto.
+Se A* non restituisce nessun percorso, si simula un'attesa cosi che gli eventi successivi abbiano effetto.
 
 Si ripete fin quando non si arriva a destinazione. 
 
@@ -548,8 +549,33 @@ Si ripete fin quando non si arriva a destinazione.
 
 Sono state utilizzate le classi per la rappresentazione di un problema di ricerca e la sua soluzione provenienti da [IAPython](https://artint.info/AIPython/).
 Tali classi sono situate in `src/external_lib`.
-I file sono stati modificati dagli originali per rimuovere la stampa a vide dello stato della ricerca.
+I file sono stati modificati dagli originali per rimuovere la stampa a video dello stato della ricerca.
 
 ### Decisioni di progetto 
 
+Le funzioni per il calcolo del tempo di percorrenza, della distanza tra due nodi sono in `src/service/util.py`.
+Come unità di misura di tempo sono stati scelti i ms poiché i secondi risultavano poco precisi.
+Compiere 1m di distanza a 50km/h risulta pari a 0,00002s.
+
+All'algoritmo *A** è stata aggiunta la tecnica del pruning attraverso *MPP*.
+Avendo nodi molto vicini geograficamente, percorre una distanza infinitissimamente piccola tra una determinata coppia di nodi risultava ottimale piuttosto che spostarsi su un altro nodo; andando in loop.
+Una prima soluzione è stata utilizzare il peso dell'euristica al quadrato ma ciò non la rendeva più ammisibile: il costo dell'euristica superava quello effettivo.
+Adoperando il *MPP* si è risolto il problema poiché il percorso restitutio non tornava mai sui suoi vecchi passi.
+
+I servizi che adoperano la ricerca e la definizione del problema sono in `src/service/search` che estendono le classi definite da *IAPython*.
+
+Il simulatore di eventi e del cammino del percorso è definito in `src/service/handler.py`.
+Gli eventi sono aggiornati pian piano che si percorre il cammino migliore.
+
+## Conclusioni 
+
+L'obbiettivo di trovare il percorso migliore considerando la modifica sulla percorrenza degli archi è stato raggiunto.
+
+La maggiore difficoltà è stata lavorare con dati reali.
+Distanze veramente piccole ad alte velocità hanno creato problemi di loop.
+
+I possibili sviluppi sono:
+
+* Considerare l'elemento *relation* di open street map: abilita a spostamenti a piedi, bici e mezzi pubblici.
+* Considerare i segnali di precedenza e stop e semafori: fare il percorso con meno "pause" possibili
 
