@@ -506,8 +506,36 @@ Il modello risultate dalle query prolog è in `src/model/prolog`.
 
 ## Risoluzione di problemi mediante ricerca
 
+Risolvere i problemi mediante ricerca è una tecnica fondamentale nella ingegneria della conoscenza.
+
+Questa tecnica prevede la formulazione di uno spazio di ricerca, dove vengono esplorate diverse soluzioni per trovare l'ottimale.
+
+Per applicarla è necessario definire uno stato iniziale, una serie di azioni che cambiano il nostro stato e lo stato finale.
+
+Durante il processo di ricerca si possono applicare diversi algoritmi che si distinguono in *ricerca informata* e *ricerca non informata*.
+La *ricerca non informata* non hanno conoscenza sulla posizione degli obbiettivi e non possono essere guidati.
+La *ricerca informata* ha conosceza sulla posizione degli obbiettivi e possono essere guidati.
+
 ### Sommario 
 
+Il nostro grafo è composto da nodi caratterizzati da latitudine e longitude.
 
-### Strumenti utilizzati 
+I nodi sono collegati attraverso archi che congiungono due nodi indicando anche la velocità massima.
+
+Il costo di attraversamento di un arco è dato dal tempo di percorrenza della distanza de nodi in km ipotizzando di andare
+alla velocità massima consentita.
+
+Il nostro problema di ricerca fa parte de problemi di ricerca informata, sappiamo dove si trova il nodo di destinazione.
+
+L'algoritmo sceeto per la ricerca è 'A*' che è un miglioramento dell'algoritmo di dijkstra guidato dalla funzione euristica.
+
+
+### Strumenti utilizzati
+
+Sono state utilizzate le classi per la rappresentazione di un problema di ricerca e la sua soluzione provenienti da [IAPython](https://artint.info/AIPython/).
+Tali classi sono situate in `src/external_lib`.
+I file sono stati modificati dagli originali per rimuovere la stampa a vide dello stato della ricerca.
+
+### Decisioni di progetto 
+
 
