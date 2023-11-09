@@ -12,14 +12,11 @@ AA 2022-2023
 
 ## Introduzione
 
-In astratto questo caso di studio si propone di trovare il percorso ottimale in un grafo tra una coppia di nodi
-considerando che col passare del tempo la possibilità di attraversare un arco vari nel tempo.
+Questo caso di studio si propone di trovare il percorso minimo tra una coppia di nodi in un grafo dove la possibilità di attraversare ogni arco varia nel tempo.
 
-Il dominio specifico prende in considerazione lo spostamento in auto in una città e l'esigenza di arrivare a una
-determinata posizione.
+Il dominio specifico prende in considerazione lo spostamento in auto in una città e l'esigenza di arrivare a una determinata posizione.
 
-Durante il percorso verso destinazione, causa incidenti o manifestazioni, certe strade diventino impercorribili
-ed è necessario cambiare strada.
+Durante il percorso verso destinazione, causa incidenti o manifestazioni, certe strade diventino impercorribili ed è necessario cambiare strada.
 Col passare del tempo, è possibile che strade precedentemente bloccate siano di nuovo attraversabili fornendo un percorso
 migliore.
 Tutti queste modifiche di operabilità sulle strade prendono il nome di **events**.
@@ -256,10 +253,11 @@ A - C - F
 G   H
 ```
 
-Questa semplificazione è giustificata da due fattori:
+Questa semplificazione è giustificata da tre fattori:
 
 1. Il percorso ottimale non dipende dal numero di archi attraversati.
 2. Tutti i nodi che generano intersezioni rimangono nel grafo, lasciandolo connesso.
+3. Se viene rimossa la possibilità di attraversa un arco intermedio basta disabilitare l'arco che lo riassume. 
 
 Per le limitazioni di Python, la città in esame scelta è [Atrani](https://it.wikipedia.org/wiki/Atrani).
 Una delle più piccole città d'Italia.
@@ -514,20 +512,31 @@ Per applicarla è necessario definire uno stato iniziale, una serie di azioni ch
 
 Durante il processo di ricerca si possono applicare diversi algoritmi che si distinguono in *ricerca informata* e *ricerca non informata*.
 La *ricerca non informata* non hanno conoscenza sulla posizione degli obbiettivi e non possono essere guidati.
-La *ricerca informata* ha conosceza sulla posizione degli obbiettivi e possono essere guidati.
+La *ricerca informata* ha conoscenza sulla posizione degli obbiettivi e possono essere guidati.
 
 ### Sommario 
 
 Il nostro grafo è composto da nodi caratterizzati da latitudine e longitude.
 
-I nodi sono collegati attraverso archi che congiungono due nodi indicando anche la velocità massima.
+Una coppia di nodi è collegata attraverso un arco che indica anche la velocità massima.
 
-Il costo di attraversamento di un arco è dato dal tempo di percorrenza della distanza de nodi in km ipotizzando di andare
-alla velocità massima consentita.
+Il costo di attraversamento di un arco è data dal tempo necessario per fare la distanza in km orari dei nodi alla velocità massima consentita.
 
-Il nostro problema di ricerca fa parte de problemi di ricerca informata, sappiamo dove si trova il nodo di destinazione.
+Per conoscere le adiacenze di un nodo e le caratteristiche dell'arco è possibile interrogare la base di conoscenza.
 
-L'algoritmo sceeto per la ricerca è 'A*' che è un miglioramento dell'algoritmo di dijkstra guidato dalla funzione euristica.
+Lo stato iniziale del nostro problema è il nodo di partenza mentre lo stato finale è il nodo di destinazione.
+Le azioni possibili sono quelle di attraversare gli archi ottenuti dalla base di conoscenza.
+
+Conoscendo il nodo di destinazione e partenza ricadiamo nei problemi di ricerca informati ed è possibile utilizzare algoritmo di ricerca informati.
+L'algoritmo scelto è `A*`, un miglioramento dell'algoritmo di dijkstra.
+
+La funzione euristica definita è simulare l'esistenza di un arco diretto verso il nodo obbiettivo con la possibilità di 
+viaggiare alla velocità massima.
+In questo modo non sovrastimiamo il costo effettivo della ricerca e diamo priorità ai nodi geograficamente più vicini al nodo di destinazione.
+Questo vale poiché non esisterebbe nessun altro percorso più breve o una serie di percorsi con velocità più alte possibili.
+
+
+
 
 
 ### Strumenti utilizzati
