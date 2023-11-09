@@ -90,7 +90,7 @@ osm:Way
 Esempio di un elemento `way`:
 
 ```xml
-<way id="1213086878" visible="true" version="1" changeset="142154502" timestamp="2023-10-04T16:34:12Z" user="Fogey7" uid="11127047">
+<way id="1213086878" >
   <nd ref="11238720363"/>
   <nd ref="11238720362"/>
   <nd ref="11238720361"/>
@@ -130,7 +130,7 @@ osm:highway
 Esempio di elemento `highway` e `HighwayValue`.
 
 ```xml
-<way id="1213086878" visible="true" version="1" changeset="142154502" timestamp="2023-10-04T16:34:12Z" user="Fogey7" uid="11127047">
+<way id="1213086878">
   <nd ref="11238720363"/>
   <nd ref="11238720362"/>
   <nd ref="11238720361"/>
