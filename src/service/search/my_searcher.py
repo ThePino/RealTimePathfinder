@@ -1,7 +1,7 @@
-from src.external_lib.searchGeneric import AStarSearcher
+from src.external_lib.searchMPP import SearcherMPP
 
 
-class MySearcher(AStarSearcher):
+class MySearcher(SearcherMPP):
     """
     My searcher that use AStarMethod
     """

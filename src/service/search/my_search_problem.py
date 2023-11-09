@@ -35,8 +35,8 @@ class MySearchProblem(Search_problem):
         return self.cache[node]
 
     def heuristic(self, n):
-        edge = Edge(self.to_node, 50)
-        return self._make_arc(n, edge).cost ** 2
+        edge = Edge(self.to_node, 500)
+        return self._make_arc(n, edge).cost
 
     def _make_arc(self, from_node: Node, edge: Edge) -> Arc:
         """
